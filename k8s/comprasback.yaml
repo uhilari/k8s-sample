@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comprasback-dpl
+  labels:
+    app: comprasback
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: comprasback
+  template:
+    metadata:
+      labels:
+        app: comprasback
+    spec:
+      containers:
+      - name: comprasback
+        image: uhilari/comprasback:0.0.3
+        env:
+        - name: NATS_SVR
+          value: "nats://nats-svr:4222"
+        resources:
+          limits:
+            memory: "128M"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: comprasback-svc
+# spec:
+#   selector:
+#     app: comprasback
+#   ports:
+#   - protocol: TCP
+#     port: 80
+#     targetPort: 80
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: compras-lb
+# spec:
+#   selector:
+#     app: compras
+#   ports:
+#   - protocol: TCP
+#     port: 8580
+#     targetPort: 80
+#   type: LoadBalancer
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: compras-ing
+#   labels:
+#     name: compras
+#   annotations:
+#     nginx.ingress.kubernetes.io/rewrite-target: /$2
+# spec:
+#   ingressClassName: nginx
+#   rules:
+#   - host: compras.dev
+#     http:
+#       paths:
+#       - pathType: Prefix
+#         path: /api(/|$)(.*)
+#         backend:
+#           service:
+#             name: compras-svc
+#             port: 
+#               number: 80

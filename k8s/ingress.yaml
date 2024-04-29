@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myerp-ingress
+  labels:
+    name: myerp
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: myerp.dev
+      http:
+        paths:
+          - path: /api/compras(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: compras-svc
+                port:
+                  number: 80
+          - path: /api/inventario(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: inventario-svc
+                port:
+                  number: 80

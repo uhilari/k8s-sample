@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myerp-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: myerp.dev
+      http:
+        paths:
+          - path: /api/compras(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: prd-compras-svc
+                port:
+                  number: 80
+          - path: /api/inventario(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: prd-inventario-svc
+                port:
+                  number: 80

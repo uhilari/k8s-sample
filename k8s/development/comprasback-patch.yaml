@@ -1,0 +1,12 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: comprasback-dpl
+spec:
+  template:
+    spec:
+      containers:
+        - name: comprasback
+          env:
+          - name: NATS_SVR
+            value: "nats://dev-nats-svr:4222"        
